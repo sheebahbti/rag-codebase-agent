@@ -12,7 +12,10 @@ def load_repo(repo_name: str) -> list[dict]:
     documents = []
 
     print(f"[{repo_name}] Fetching files...")
-    documents.extend(_fetch_files(repo, repo_name))
+    try:
+        documents.extend(_fetch_files(repo, repo_name))
+    except Exception as e:
+        print(f"[{repo_name}] Skipping files — {e}")
 
     print(f"[{repo_name}] Fetching issues...")
     documents.extend(_fetch_issues(repo, repo_name))

@@ -10,7 +10,7 @@ from ingestion.embedder import embed_and_store
 
 def main():
     if not GITHUB_REPOS:
-        print("No repos configured. Add them to your .env file as GITHUB_REPOS=owner/repo")
+        print("No repos found. Set GITHUB_REPOS=owner/repo in .env, or leave it blank to auto-discover all your repos.")
         return
 
     all_chunks = []

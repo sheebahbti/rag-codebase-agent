@@ -28,9 +28,9 @@ def check(label: str, fn):
 print("\n[1] Config")
 
 def test_config():
-    from config import OPENAI_API_KEY, GITHUB_TOKEN, GITHUB_REPOS
-    assert OPENAI_API_KEY and OPENAI_API_KEY.startswith("sk-"), \
-        "OPENAI_API_KEY missing or invalid in .env"
+    from config import GROQ_API_KEY, GITHUB_TOKEN, GITHUB_REPOS
+    assert GROQ_API_KEY and GROQ_API_KEY.startswith("gsk_"), \
+        "GROQ_API_KEY missing or invalid in .env"
     assert GITHUB_TOKEN and len(GITHUB_TOKEN) > 10, \
         "GITHUB_TOKEN missing in .env"
     assert len(GITHUB_REPOS) > 0, \

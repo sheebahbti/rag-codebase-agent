@@ -1,5 +1,5 @@
 .env
-chroma_db/
+# chroma_db/ is intentionally committed so the deployed app works without re-ingesting
 venv/
 __pycache__/
 *.pyc

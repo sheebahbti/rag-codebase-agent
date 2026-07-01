@@ -77,3 +77,77 @@ Your GitHub Repo
 | `langchain-groq` | Call the free LLM | Groq is fastest free LLM API |
 | `PyGithub` | Download repo content | Official GitHub API wrapper |
 | `Streamlit` | Build the chat UI | No frontend code needed |
+
+---
+
+## Re-ingestion: Keeping the Index Up to Date
+
+`ingest.py` takes a **snapshot** of your repo at the time you run it. ChromaDB stores that snapshot locally in `chroma_db/`.
+
+**When to re-run `python3 ingest.py`:**
+- You pushed new code to your repo
+- You closed/opened issues you want to query
+- You added a new repo to `GITHUB_REPOS`
+
+**What happens when you re-run it:**
+- It fetches the latest files and issues from GitHub
+- It overwrites the old vectors in ChromaDB with fresh ones
+- The UI will immediately reflect the updated code on next query
+
+**Tip:** If you only changed one repo, you can set `GITHUB_REPOS=owner/that-repo` temporarily to re-ingest just that one instead of all repos.
+
+---
+
+## How the `.env` File Works
+
+The `.env` file stores secrets that the app needs but should never be committed to Git.
+
+| Key | What it does |
+|---|---|
+| `GROQ_API_KEY` | Authenticates your requests to Groq's AI API (free) |
+| `GITHUB_TOKEN` | Lets PyGithub read your repos (free, needs `repo` scope) |
+| `GITHUB_REPOS` | Comma-separated list of repos to index — leave blank to auto-discover all |
+
+`config.py` reads these at startup using `python-dotenv`. If a key is missing, the relevant feature silently fails or prints an error.
+
+**Security rules:**
+- Never commit `.env` to Git (add it to `.gitignore`)
+- Never share your keys publicly — regenerate them if you do
+- The `env.example` file is safe to commit — it only has placeholder values
+
+---
+
+## Project Setup Steps (Reproduce from Scratch)
+
+1. **Clone the repo and install dependencies**
+   ```bash
+   pip3 install -r requirements.txt
+   pip3 install langchain-groq sentence-transformers --user
+   ```
+
+2. **Create `.env` from the example**
+   ```bash
+   cp env.example .env
+   ```
+
+3. **Fill in `.env`**
+   - `GROQ_API_KEY` — get free key at [console.groq.com](https://console.groq.com)
+   - `GITHUB_TOKEN` — generate at [github.com/settings/tokens](https://github.com/settings/tokens) (tick `repo` scope)
+   - `GITHUB_REPOS` — leave blank to index all your repos, or set e.g. `myusername/my-project`
+
+4. **Index your repos**
+   ```bash
+   python3 ingest.py
+   ```
+
+5. **Run tests**
+   ```bash
+   python3 test.py
+   ```
+
+6. **Launch the UI**
+   ```bash
+   python3 -m streamlit run ui/app.py
+   ```
+
+Re-run step 4 any time your repo changes.

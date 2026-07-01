@@ -1,28 +1,26 @@
 # Outstanding Items
 
-Items that still need to be completed before the project is fully working.
+---
+
+## Completed
+
+- [x] **`.env` key name fixed** — changed from `OPENAI_API_KEY` to `GROQ_API_KEY`
+- [x] **Groq API key added** to `.env`
+- [x] **GitHub token added** to `.env`
+- [x] **Auto-discover repos** — leaving `GITHUB_REPOS` blank now auto-fetches all repos for the token's GitHub user
+- [x] **README setup guide** — full step-by-step instructions added
 
 ---
 
-## Blockers (must do first)
+## Next Steps (do these in order)
 
-- [ ] **Fill in `.env` file**
-  - Get free Groq API key from https://console.groq.com → API Keys
-  - Get GitHub token from https://github.com/settings/tokens (tick `repo` scope)
-  - Set `GITHUB_REPOS=owner/repo-name` to the repo(s) you want to index
-
-- [ ] **Update `.env` key name** — the current `.env` still says `OPENAI_API_KEY`, needs to be changed to `GROQ_API_KEY=gsk_...`
-
----
-
-## Setup (run once after filling .env)
-
-- [ ] **Install new packages**
+- [ ] **Install packages**
   ```bash
+  pip3 install -r requirements.txt
   pip3 install langchain-groq sentence-transformers --user
   ```
 
-- [ ] **Run ingestion** — indexes your repo into ChromaDB
+- [ ] **Run ingestion** — indexes your repos into ChromaDB
   ```bash
   python3 ingest.py
   ```

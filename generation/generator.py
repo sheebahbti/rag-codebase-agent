@@ -9,7 +9,7 @@ def generate_answer(query: str, context_chunks: list[dict]) -> dict:
     Returns the answer text and the sources used.
     """
     llm = ChatGroq(
-        model="llama3-8b-8192",  # free, fast — swap to llama3-70b-8192 for better quality
+        model="llama-3.1-8b-instant",  # free, fast — swap to llama-3.3-70b-versatile for better quality
         groq_api_key=GROQ_API_KEY,
         temperature=0,
     )
