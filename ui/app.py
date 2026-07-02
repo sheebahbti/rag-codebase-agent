@@ -19,17 +19,50 @@ with st.sidebar:
     repo_filter = None if selected == "All repos" else selected
     top_k = st.slider("Number of results to retrieve", 3, 10, 5)
 
+    st.divider()
+    st.subheader("What's indexed")
+    st.markdown("""
+**Repos available:**
+- `SwimmingPoolCleaningService`
+- `MyPortfolio`
+- `rag-codebase-agent`
+- `AIProjects`
+- `MyReminders`
+
+**Content type:** code files & docs only
+
+**Not indexed:** GitHub issues, PRs, comments
+    """)
+
 # Chat history stored in session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
+
+# Suggested prompts shown only when chat is empty
+SUGGESTED_PROMPTS = [
+    "How does the Swimming Pool Cleaning Service work?",
+    "What technologies are used in MyPortfolio?",
+    "Why was Streamlit chosen for deployment instead of Render?",
+    "How does the RAG pipeline work in this project?",
+    "What AI projects are in AIProjects repo?",
+    "How is the codebase structured?",
+]
+
+if not st.session_state.messages:
+    st.markdown("#### Suggested questions")
+    cols = st.columns(2)
+    for i, prompt in enumerate(SUGGESTED_PROMPTS):
+        if cols[i % 2].button(prompt, use_container_width=True):
+            st.session_state.pending_query = prompt
+            st.rerun()
 
 # Display previous messages
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         st.markdown(msg["content"])
 
-# Input box
-query = st.chat_input("Ask something about your codebase...")
+# Handle prompt button click or typed input
+query = st.session_state.pop("pending_query", None) or st.chat_input("Ask something about your codebase...")
 
 if query:
     # Show user message
