@@ -80,6 +80,24 @@ Your GitHub Repo
 
 ---
 
+## Why Streamlit Cloud for deployment, not Render?
+
+Both Streamlit Community Cloud and Render can host Python web apps, but Streamlit Cloud was the better fit here:
+
+| | Streamlit Cloud | Render |
+|---|---|---|
+| **Setup** | 3 clicks — connects directly to GitHub, no config files needed | Requires a `Dockerfile` or `render.yaml` and port configuration |
+| **Cost** | Free forever for public apps | Free tier pauses the app after 15 minutes of inactivity |
+| **Streamlit support** | Native — built specifically to run Streamlit apps | Generic platform — you configure the start command yourself |
+| **Secrets** | Built-in secrets UI in the dashboard | Environment variables UI (similar but more setup steps) |
+| **Best for** | Python data/ML/AI apps with a Streamlit UI | General web apps, REST APIs, backends with custom servers |
+
+Since this project is a pure Streamlit app with no custom backend, API routes, or Docker requirements, Streamlit Cloud deploys it with zero configuration. Render would work too, but would require writing a Dockerfile and configuring the start command, port, and environment — extra work with no benefit for this use case.
+
+If this project ever adds a REST API (so other apps can query it programmatically), Render or Railway would be the better deployment choice.
+
+---
+
 ## Re-ingestion: Keeping the Index Up to Date
 
 `ingest.py` takes a **snapshot** of your repo at the time you run it. ChromaDB stores that snapshot locally in `chroma_db/`.
