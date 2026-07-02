@@ -14,25 +14,18 @@
 
 ## Next Steps (do these in order)
 
-- [ ] **Install packages**
-  ```bash
-  pip3 install -r requirements.txt
-  pip3 install langchain-groq sentence-transformers --user
-  ```
+- [x] **Install packages** — Streamlit 1.37.1, langchain-groq confirmed installed
 
-- [ ] **Run ingestion** — indexes your repos into ChromaDB
-  ```bash
-  python3 ingest.py
-  ```
+- [x] **Run ingestion** — ChromaDB has 1,238 chunks indexed in `codebase` collection
 
 - [ ] **Run tests** — verify the full pipeline works
   ```bash
   python3 test.py
   ```
 
-- [ ] **Launch UI**
+- [ ] **Launch UI** ← *you are here*
   ```bash
-  python3 -m streamlit run ui/app.py
+  streamlit run ui/app.py
   ```
 
 ---
