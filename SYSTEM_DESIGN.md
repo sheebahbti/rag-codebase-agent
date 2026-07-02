@@ -123,6 +123,56 @@ Question: How does booking work?
 
 ---
 
+### Embedding Model — `all-MiniLM-L6-v2` (in plain English)
+
+The embedding model converts any piece of text into a list of **384 numbers** that represent its *meaning*.
+
+```
+"How do I book a cleaning?"  →  [0.12, -0.45, 0.88, 0.03, ...]  (384 numbers)
+"Schedule a pool service"    →  [0.11, -0.43, 0.85, 0.01, ...]  (very similar numbers ✅)
+"What is the price?"         →  [0.67,  0.22, -0.31, 0.55, ...]  (very different numbers ❌)
+```
+
+This is why searching *"book a cleaning"* finds a function called `schedule_service()` — the **meaning is close** even though the words are different. Traditional keyword search would miss this completely.
+
+**Why this model specifically?**
+- Runs 100% locally on CPU — no API call, no cost, no internet needed at query time
+- Fast (~50ms per query) and small (80MB) — fits in Streamlit Cloud's free tier memory
+- "MiniLM" = distilled from a much larger model to be fast while staying accurate
+
+---
+
+### Orchestration — LangChain (in plain English)
+
+LangChain is the **glue** that connects all the pieces in the right order. Without it, you'd write all the wiring code yourself.
+
+**Without LangChain** — you write everything from scratch:
+```python
+chunks = split_text(github_file, size=500)
+vectors = sentence_transformer.encode(chunks)
+chromadb.insert(chunks, vectors)
+# ...then for each query...
+q_vec = sentence_transformer.encode(question)
+results = chromadb.search(q_vec)
+prompt = f"Context: {results}\nQuestion: {question}"
+response = requests.post(groq_url, json={"prompt": prompt})
+answer = response.json()["choices"][0]["message"]["content"]
+```
+
+**With LangChain** — standardised building blocks. And if you want to swap Groq for OpenAI, or ChromaDB for Pinecone, you change **one line**, not 50.
+
+The specific LangChain pieces used in this project:
+
+| LangChain piece | What it does |
+|---|---|
+| `ChatGroq` | Wraps the Groq API so it works like any LangChain LLM |
+| `HumanMessage` / `SystemMessage` | Structures the prompt into system + user roles |
+| `langchain-community` | Provides connectors to ChromaDB, GitHub, etc. |
+
+> In this project LangChain is used lightly — mainly for the LLM call. ChromaDB and sentence-transformers are called directly for speed and simplicity.
+
+---
+
 ## Data Flow Summary
 
 ```mermaid
