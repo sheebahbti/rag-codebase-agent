@@ -1,3 +1,6 @@
+# Open the app using URL
+ https://rag-codebase-agent-4xmzwtfuxz8344hreyglqc.streamlit.app/
+
 # RAG Codebase Agent
 
 Ask questions about your GitHub repository in plain English and get answers with sources.
